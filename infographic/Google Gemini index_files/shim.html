@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<!-- saved from url=(0132)blob:https://20ebzvbugwy8rp68tqr4mx3jakpquv43e3wclnejgqlrynr5i2-h769614562.scf.usercontent.goog/7d5db944-d319-4c9a-b859-a8a6891c3aea -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>(function(firebaseConfig, initialAuthToken, appId) {
+        window.__firebase_config = firebaseConfig;
+        window.__initial_auth_token = initialAuthToken;
+        window.__app_id = appId;
+            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6IjhkZDUxMTBhMGIwYjdkNDJhNDM2ODg4MzdmODg5M2M2OTNhM2RhNDMiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6XC9cL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbVwvZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIwMzQ5Mzg5MzA4NzA3MTkwNzY1MCIsImFwcElkIjoiY180NDgyYTFmYjI0OWZmODU3XzJiN2UxYzhkLWE0ZjEtNGMyYS05ZTNlLWQ5MGMxZjVkNjhkMS11bmRlZmluZWQiLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiZXhwIjoxNzUwNDk1NDQ1LCJpYXQiOjE3NTA0OTE4NDUsImFsZyI6IlJTMjU2In0.1G8-jXGQ2vvbarkMV7khh1bpVfEowRoFrzfAFGxySQJ8HPzxNZNRuu7PenreOXM-RkIuyXmrSa2ZAOKqhqbMd9oe-szb0wLZp3SqkAOLNDBfkf3Q4CeiBwpQRbnUcoZTtNYVWgCsAV_B7saMkTziBH1FU0I4t1lD6zBn0ljPpcXrv-58U9GjIwmSG6Gk69mfK-aO8yoM6K2GXA_NrotfHRw2WizboAkJPkzTkToagRtO2JZuOll-pzzhjn0OBGgKM4xnztgNmFQ71pP5kDucl8dwYMre_Z2mZYfI1MFYxJSmQiEeyP9g820IAhOar1f99M0r2bLnjN0PP668DWw1LQ","c_4482a1fb249ff857_2b7e1c8d-a4f1-4c2a-9e3e-d90c1f5d68d1-undefined")</script><script>(function() {
+  // Ensure this script is executed only once
+  if (window.firebaseAuthBridgeScriptLoaded) {
+    return;
+  }
+  window.firebaseAuthBridgeScriptLoaded = true;
+
+  let nextTokenPromiseId = 0;
+
+  // Stores { resolve, reject } for ongoing token requests
+  const pendingTokenPromises = {};
+
+  // Listen for messages from the Host Application
+  window.addEventListener('message', function(event) {
+
+    const messageData = event.data;
+
+  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
+      const { success, token, error, promiseId } = messageData ?? {};
+      if (pendingTokenPromises[promiseId]) {
+        if (success) {
+          pendingTokenPromises[promiseId].resolve(token);
+        } else {
+          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
+        }
+        delete pendingTokenPromises[promiseId];
+      }
+    }
+  });
+
+  // Expose a function for the Generated App to request a new Firebase token
+  window.requestNewFirebaseToken = function() {
+    const currentPromiseId = nextTokenPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingTokenPromises[currentPromiseId] = { resolve, reject };
+    });
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'REQUEST_NEW_FIREBASE_TOKEN',
+        promiseId: currentPromiseId
+      }, '*');
+    } else {
+      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
+      delete pendingTokenPromises[currentPromiseId];
+    }
+    return promise;
+  };
+})();</script><script>let realOriginalGetUserMedia = null;
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+}
+
+(function() {
+  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
+    try {
+      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
+        get: function() {
+          return undefined; // Or throw an error
+        },
+        configurable: false
+      });
+    } catch (error) {
+      console.error("Error defining prototype getter:", error);
+    }
+  }
+})();
+
+(function() {
+  let originalGetUserMedia = realOriginalGetUserMedia;
+
+  const pendingMediaResolvers = {};
+  let nextMediaPromiseId = 0;
+
+  function interceptGetUserMedia() {
+    if (navigator.mediaDevices) {
+      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+        value: function(constraints) {
+          const mediaPromiseId = nextMediaPromiseId++;
+          const promise = new Promise((resolve, reject) => {
+            pendingMediaResolvers[mediaPromiseId] = (granted) => {
+              delete pendingMediaResolvers[mediaPromiseId];
+              if (granted) {
+                if (originalGetUserMedia) {
+                  originalGetUserMedia(constraints).then(resolve).catch(reject);
+                } else {
+                  reject(new Error("Original getUserMedia not available."));
+                }
+              } else {
+              reject(new DOMException('Permission denied', 'NotAllowedError'));
+            }
+          };
+        });
+
+        window.parent.postMessage({
+          type: 'requestMediaPermission',
+          constraints: constraints,
+          promiseId: mediaPromiseId,
+        }, '*');
+
+        return promise;
+      },
+      writable: false,
+      configurable: false
+    });
+    }
+  }
+
+  interceptGetUserMedia();
+
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'childList' && mutation.addedNodes) {
+        mutation.addedNodes.forEach(node => {
+          if (node === navigator.mediaDevices) {
+            interceptGetUserMedia();
+          }
+        });
+      }
+    }
+  });
+
+  window.addEventListener('message', function(event) {
+    if (event.data) {
+      if (event.data.type === 'resolveMediaPermission') {
+        const { promiseId, granted } = event.data;
+        if (pendingMediaResolvers[promiseId]) {
+          pendingMediaResolvers[promiseId](granted);
+        }
+      }
+    }
+  });
+
+})();</script><script>((function(modelInformation) {
+  const originalFetch = window.fetch;
+  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
+  let googleLlmBaseApiUrls = [
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
+  ];
+  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+    );
+  });
+
+  const pendingFetchResolvers = {};
+  let nextPromiseId = 0;
+
+  function handleStringInput(input, optionsArgument) {
+    const actualUrl = input;
+    const fetchCallArgs = [actualUrl, optionsArgument];
+    const effectiveOptions = optionsArgument || {};
+    const bodyForApiKeyCheck = effectiveOptions.body;
+    const bodyForPostMessage = effectiveOptions.body;
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  function handleRequestInput(input, optionsArgument) {
+    const actualUrl = input.url;
+    const fetchCallArgs = [input, optionsArgument];
+    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (optionsArgument) {
+      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
+      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
+      if ('body' in optionsArgument) {
+        bodyForApiKeyCheck = optionsArgument.body;
+        bodyForPostMessage = optionsArgument.body;
+      } else {
+        bodyForApiKeyCheck = undefined;
+        bodyForPostMessage = input.body;
+      }
+    } else {
+      bodyForApiKeyCheck = undefined;
+      bodyForPostMessage = input.body;
+    }
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  window.fetch = function(input, optionsArgument) {
+    let actualUrl;
+    let fetchCallArgs;
+    let effectiveOptions = {};
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (typeof input === 'string') {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
+    } else if (input instanceof Request) {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
+    } else {
+      return originalFetch.apply(window, [input, optionsArgument]);
+    }
+
+    effectiveOptions.method = effectiveOptions.method || 'GET';
+    if (!effectiveOptions.headers) {
+      effectiveOptions.headers = new Headers();
+    }
+
+
+    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
+      let apiKeyIsNull = true;
+
+      const regex = new RegExp("models/([^:]+)");
+      const modelNameMatch = actualUrl.match(regex);
+      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
+
+
+      try {
+        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
+        const apiKeyParam = urlObject.searchParams.get('key');
+        if (apiKeyParam) {
+          apiKeyIsNull = false;
+        }
+      } catch (e) {
+        // Continue checks even if URL parsing fails
+      }
+
+      if (apiKeyIsNull && effectiveOptions.headers) {
+        const h = new Headers(effectiveOptions.headers);
+        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
+        if (apiKeyHeaderValue) {
+          apiKeyIsNull = false;
+          return originalFetch.apply(window, fetchCallArgs);
+        }
+      }
+
+      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
+        try {
+          const bodyData = JSON.parse(bodyForApiKeyCheck);
+          if (bodyData && bodyData.apiKey) {
+            apiKeyIsNull = false;
+            return originalFetch.apply(window, fetchCallArgs);
+          }
+        } catch (e) {
+          // Ignore JSON parsing errors
+        }
+      }
+
+      if(apiKeyIsNull) {
+        const promiseId = nextPromiseId++;
+        const promise = new Promise((resolve) => {
+          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
+            delete pendingFetchResolvers[promiseId];
+            resolve(resolvedResponse);
+          };
+        });
+
+        let serializedBodyForPostMessage;
+        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
+            serializedBodyForPostMessage = bodyForPostMessage;
+        } else if (bodyForPostMessage instanceof ReadableStream) {
+            serializedBodyForPostMessage = null;
+        } else {
+            try {
+                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
+            } catch (e) {
+                serializedBodyForPostMessage = null;
+            }
+        }
+
+        const messageOptions = {
+            method: effectiveOptions.method,
+            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
+            body: serializedBodyForPostMessage
+        };
+
+        window.parent.postMessage({
+          type: 'requestFetch',
+          url: actualUrl,
+          modelName: modelName,
+          options: messageOptions,
+          promiseId: promiseId,
+        }, '*');
+
+        return promise;
+      }
+      return originalFetch.apply(window, fetchCallArgs);
+    }
+    return originalFetch.apply(window, fetchCallArgs);
+  };
+
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'resolveFetch') {
+      const { promiseId, response } = event.data;
+      if (pendingFetchResolvers[promiseId]) {
+        try {
+          const reconstructedResponse = new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: new Headers(response.headers),
+          });
+          pendingFetchResolvers[promiseId](reconstructedResponse);
+        } catch (error) {
+          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
+        }
+      }
+    }
+  });
+
+}))({"textModelName":"gemini-2.5-flash-preview-04-17","imageModelName":"imagen-3.0-generate-002","videoModelName":"veo-2.0-generate-001","deprecatedTextModelNames":["gemini-2.0-flash"]})</script><script>(function() {
+  const originalConsoleLog = console.log;
+  const originalConsoleError = console.error;
+
+    /**
+   * Normalizes an error event or a promise rejection reason into a structured error object.
+   * @param {*} errorEventOrReason The error object or reason.
+   * @return {object} Structured error data { message, name, stack }.
+   */
+  function getErrorObject(errorEventOrReason) {
+    if (errorEventOrReason instanceof Error) {
+      return {
+        message: errorEventOrReason.message,
+        name: errorEventOrReason.name,
+        stack: errorEventOrReason.stack,
+      };
+    }
+    // Fallback for non-Error objects.
+    try {
+      return {
+        message: JSON.stringify(errorEventOrReason),
+        name: 'UnknownErrorType',
+        stack: null,
+      };
+    } catch (e) {
+      return {
+        message: String(errorEventOrReason),
+        name: 'UnknownErrorTypeNonStringifiable',
+        stack: null,
+      };
+    }
+  }
+
+  /**
+   * Converts an array of arguments (from log/error) into a single string.
+   * Handles Error objects specially to include their message and stack.
+   * @param {Array<*>} args - Arguments passed to console methods.
+   * @return {string} A string representation of the arguments.
+   */
+  function stringifyArgs(args) {
+    return args
+      .map((arg) => {
+        if (arg instanceof Error) {
+          const {message, stack} = arg;
+          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
+        }
+        if (typeof arg === 'object' && arg !== null) {
+          try {
+            return JSON.stringify(arg);
+          } catch (error) {
+            return '[Circular Object]';
+          }
+        } else {
+          return String(arg);
+        }
+      })
+      .join(' ');
+  }
+
+  console.log = function(...args) {
+    const logString = stringifyArgs(args);
+    window.parent.postMessage({ type: 'log', message: logString }, '*');
+    originalConsoleLog.apply(console, args);
+  };
+
+  console.error = function(...args) {
+    let errorData;
+    if (args.length > 0 && args[0] instanceof Error) {
+      const err = args[0];
+      // If the first arg is an Error, capture its details.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        ...getErrorObject(err),
+        rawArgsString: stringifyArgs(args.slice(1)),
+        timestamp: new Date().toISOString(),
+      };
+    } else {
+      // If not an Error object, treat all args as a general error message.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        message: stringifyArgs(args),
+        name: 'ConsoleLoggedError',
+        stack: null,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    window.parent.postMessage(errorData, '*');
+    originalConsoleError.apply(console, args);
+  };
+
+  // Listen for global unhandled synchronous errors.
+  window.addEventListener('error', function(event) {
+    const errorDetails = event.error ? getErrorObject(event.error) : {
+      message: event.message,
+      name: 'GlobalError',
+      stack: null,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+    };
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'global',
+      ...errorDetails,
+      message: errorDetails.message || event.message,
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+  // Listen for unhandled promise rejections (asynchronous errors).
+  window.addEventListener('unhandledrejection', function(event) {
+    const errorDetails = getErrorObject(event.reason);
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'unhandledrejection',
+      ...errorDetails,
+      message: errorDetails.message || 'Unhandled Promise Rejection',
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+})();</script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodent SDC: Bridging the Global Skills Gap</title>
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7F7F7;
+            color: #073B4C;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .stat-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            text-align: center;
+            border-top: 4px solid #FF6B6B;
+        }
+        .kpi-value {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #FF6B6B;
+            line-height: 1;
+        }
+         .kpi-label {
+            margin-top: 0.5rem;
+            font-size: 1.125rem;
+            color: #118AB2;
+            font-weight: 600;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #073B4C;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: #118AB2;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 3rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+         .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #073B4C;
+            margin-bottom: 0.75rem;
+        }
+        .card-text {
+            color: #073B4C;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #118AB2;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.order-1{order:1}.order-2{order:2}.mx-auto{margin-left:auto;margin-right:auto}.my-16{margin-top:4rem;margin-bottom:4rem}.my-24{margin-top:6rem;margin-bottom:6rem}.mt-4{margin-top:1rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-4{margin-left:1rem}.mr-3{margin-right:0.75rem}.mt-16{margin-top:4rem}.mt-8{margin-top:2rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-8{height:2rem}.w-10{width:2.5rem}.max-w-4xl{max-width:56rem}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.gap-12{gap:3rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.rounded-full{border-radius:9999px}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded-r-lg{border-top-right-radius:0.5rem;border-bottom-right-radius:0.5rem}.border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-l-2{border-left-width:2px}.border-dashed{border-style:dashed}.border-\[\#06D6A0\]{--tw-border-opacity:1;border-color:rgb(6 214 160 / var(--tw-border-opacity, 1))}.border-\[\#118AB2\]{--tw-border-opacity:1;border-color:rgb(17 138 178 / var(--tw-border-opacity, 1))}.border-\[\#FF6B6B\]{--tw-border-opacity:1;border-color:rgb(255 107 107 / var(--tw-border-opacity, 1))}.border-\[\#FFD166\]{--tw-border-opacity:1;border-color:rgb(255 209 102 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.bg-\[\#073B4C\]{--tw-bg-opacity:1;background-color:rgb(7 59 76 / var(--tw-bg-opacity, 1))}.bg-\[\#06D6A0\]{--tw-bg-opacity:1;background-color:rgb(6 214 160 / var(--tw-bg-opacity, 1))}.bg-\[\#118AB2\]{--tw-bg-opacity:1;background-color:rgb(17 138 178 / var(--tw-bg-opacity, 1))}.bg-\[\#FF6B6B\]{--tw-bg-opacity:1;background-color:rgb(255 107 107 / var(--tw-bg-opacity, 1))}.bg-\[\#FFD166\]{--tw-bg-opacity:1;background-color:rgb(255 209 102 / var(--tw-bg-opacity, 1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pb-2{padding-bottom:0.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-5xl{font-size:3rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.font-black{font-weight:900}.font-light{font-weight:300}.font-bold{font-weight:700}.text-\[\#FFD166\]{--tw-text-opacity:1;color:rgb(255 209 102 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-\[\#06D6A0\]{--tw-text-opacity:1;color:rgb(6 214 160 / var(--tw-text-opacity, 1))}.text-\[\#073B4C\]{--tw-text-opacity:1;color:rgb(7 59 76 / var(--tw-text-opacity, 1))}.text-\[\#118AB2\]{--tw-text-opacity:1;color:rgb(17 138 178 / var(--tw-text-opacity, 1))}.text-\[\#FF6B6B\]{--tw-text-opacity:1;color:rgb(255 107 107 / var(--tw-text-opacity, 1))}.text-gray-200{--tw-text-opacity:1;color:rgb(229 231 235 / var(--tw-text-opacity, 1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.hover\:bg-opacity-90:hover{--tw-bg-opacity:0.9}.focus\:border-transparent:focus{border-color:transparent}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-\[\#06D6A0\]:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(6 214 160 / var(--tw-ring-opacity, 1))}.focus\:ring-\[\#FF6B6B\]:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(255 107 107 / var(--tw-ring-opacity, 1))}.focus\:ring-\[\#FFD166\]:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(255 209 102 / var(--tw-ring-opacity, 1))}.focus\:ring-offset-2:focus{--tw-ring-offset-width:2px}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:p-8{padding:2rem}.md\:text-2xl{font-size:1.5rem;line-height:2rem}.md\:text-5xl{font-size:3rem;line-height:1}}@media (min-width: 1024px){.lg\:order-1{order:1}.lg\:order-2{order:2}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}</style></head>
+<body class="antialiased">
+
+    <header class="bg-[#073B4C] text-white py-8 px-4">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-black text-white">PRODENT SDC: FORGING GLOBAL FUTURES</h1>
+            <p class="mt-4 text-xl md:text-2xl font-light text-[#FFD166]">Bridging India's Talent with Europe's Demand</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <section id="introduction" class="my-16">
+            <h2 class="section-title">A Tale of Two Markets</h2>
+            <p class="section-subtitle">A powerful synergy is emerging. While Europe faces a critical shortage of skilled labor, India possesses a vast, young, and trainable workforce ready for global opportunities. This is where the journey begins.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="stat-card">
+                    <p class="kpi-value">75%</p>
+                    <p class="kpi-label">of EU Companies Face Skill Shortages</p>
+                </div>
+                <div class="stat-card">
+                    <p class="kpi-value">18.5M</p>
+                    <p class="kpi-label">Indian Emigrants Living Overseas</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="market-opportunity" class="my-24">
+            <h2 class="section-title">Europe's Call for Skilled Hands</h2>
+            <p class="section-subtitle">Eastern Europe is an economic engine in need of fuel. Countries like Poland, the Czech Republic, and Hungary are actively seeking blue-collar professionals, especially in manufacturing and construction, creating a prime market for skilled Indian workers.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="card">
+                    <h3 class="card-title text-center">High-Demand Jobs in Eastern Europe</h3>
+                    <p class="card-text text-center mb-4">Welders are consistently among the most sought-after professionals, cited as a key shortage in 21 European nations. This is followed closely by other trades essential for sustaining industrial growth and infrastructure development.</p>
+                    <div class="chart-container">
+                        <canvas id="demandChart" width="750" height="500" style="display: block; box-sizing: border-box; height: 400px; width: 600px;"></canvas>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <h4 class="font-bold text-lg mb-2 text-[#118AB2]">Get Country-Specific Job Insights ✨</h4>
+                        <select id="countrySelect" class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FFD166] focus:border-transparent">
+                            <option value="Poland">Poland</option>
+                            <option value="Czech Republic">Czech Republic</option>
+                            <option value="Hungary">Hungary</option>
+                            <option value="Romania">Romania</option>
+                        </select>
+                        <button id="getInsightsBtn" class="ml-4 px-4 py-2 bg-[#06D6A0] text-white rounded-md shadow-md hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-[#06D6A0] focus:ring-offset-2">Get Insights</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="card-title text-center">Foreign Worker Sectoral Share (Romania)</h3>
+                    <p class="card-text text-center mb-4">Romania's sharp increase in work permits for non-EU workers highlights where the demand lies, with construction absorbing the largest share, followed by services and transport.</p>
+                    <div class="chart-container">
+                        <canvas id="sectorChart" width="750" height="500" style="display: block; box-sizing: border-box; height: 400px; width: 600px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="challenges" class="my-24 bg-white py-16 rounded-xl shadow-inner">
+            <h2 class="section-title">The Emigrant's Gauntlet</h2>
+            <p class="section-subtitle">The path to working in Europe is paved with significant challenges. From navigating labyrinthine visa processes to adapting to new cultures, Indian workers face numerous hurdles that can hinder their success and lead to underemployment or premature return.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <div class="card border border-[#FFD166]">
+                    <h3 class="card-title">The European Work Visa Labyrinth</h3>
+                    <p class="card-text mb-6">Securing a work visa is a multi-stage process where the employer's role is critical. Any misstep in documentation or procedure can lead to delays or outright rejection.</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-[#118AB2] text-white h-10 w-10 rounded-full flex items-center justify-center font-bold text-lg">1</div>
+                            <div class="ml-4 p-3 bg-gray-100 rounded-r-lg flex-1">
+                                <h4 class="font-bold">Job Offer Secured</h4>
+                                <p class="text-sm">A valid contract from a European employer is the first step.</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center h-8">
+                            <div class="border-l-2 border-dashed border-[#118AB2]"></div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-[#118AB2] text-white h-10 w-10 rounded-full flex items-center justify-center font-bold text-lg">2</div>
+                            <div class="ml-4 p-3 bg-gray-100 rounded-r-lg flex-1">
+                                <h4 class="font-bold">Work Permit Application</h4>
+                                <p class="text-sm">Employer applies on behalf of the worker in the destination country.</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center h-8">
+                            <div class="border-l-2 border-dashed border-[#118AB2]"></div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-[#118AB2] text-white h-10 w-10 rounded-full flex items-center justify-center font-bold text-lg">3</div>
+                            <div class="ml-4 p-3 bg-gray-100 rounded-r-lg flex-1">
+                                <h4 class="font-bold">National (Type D) Visa</h4>
+                                <p class="text-sm">Worker applies at the embassy in India with the approved permit.</p>
+                            </div>
+                        </div>
+                         <div class="flex justify-center h-8">
+                            <div class="border-l-2 border-dashed border-[#118AB2]"></div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-[#118AB2] text-white h-10 w-10 rounded-full flex items-center justify-center font-bold text-lg">4</div>
+                            <div class="ml-4 p-3 bg-gray-100 rounded-r-lg flex-1">
+                                <h4 class="font-bold">Residence Permit</h4>
+                                <p class="text-sm">Upon arrival, register locally to finalize legal work status.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center">
+                        <h4 class="font-bold text-lg mb-2 text-[#118AB2]">Ask for Visa Tip ✨</h4>
+                        <select id="visaStepSelect" class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FFD166] focus:border-transparent">
+                            <option value="Job Offer Secured">Job Offer Secured</option>
+                            <option value="Work Permit Application">Work Permit Application</option>
+                            <option value="National (Type D) Visa">National (Type D) Visa</option>
+                            <option value="Residence Permit">Residence Permit</option>
+                        </select>
+                        <button id="getVisaTipBtn" class="ml-4 px-4 py-2 bg-[#FF6B6B] text-white rounded-md shadow-md hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-[#FF6B6B] focus:ring-offset-2">Get Tip</button>
+                    </div>
+                </div>
+                <div class="card border border-[#FF6B6B]">
+                    <h3 class="card-title">Key Integration Challenges</h3>
+                    <p class="card-text mb-6">Success isn't just about the job; it's about integration. Language barriers, cultural differences, and skill validation are the most significant hurdles impacting migrant well-being and retention.</p>
+                    <div class="chart-container">
+                        <canvas id="challengesChart" width="750" height="500" style="display: block; box-sizing: border-box; height: 400px; width: 600px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="my-24">
+            <h2 class="section-title">The Prodent-PMKVY Bridge</h2>
+            <p class="section-subtitle">Prodent SDC, amplified by India's PMKVY scheme, creates a powerful solution. This partnership directly tackles emigrant challenges by providing internationally recognized skills, pre-departure training, and a framework for ethical, successful migration.</p>
+            <div class="card bg-[#073B4C] text-white p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-[#FFD166] border-b-2 border-[#FFD166] pb-2 mb-4">The Challenge</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start"><span class="text-[#FF6B6B] font-bold text-2xl mr-3">✖</span><div><strong class="text-white">Skill Gaps &amp; Mismatch</strong><p class="text-gray-300 font-light">Local Indian training doesn't meet European standards, leading to underemployment.</p></div></li>
+                            <li class="flex items-start"><span class="text-[#FF6B6B] font-bold text-2xl mr-3">✖</span><div><strong class="text-white">Language &amp; Cultural Barriers</strong><p class="text-gray-300 font-light">Workers arrive unprepared for new social and workplace norms, causing isolation.</p></div></li>
+                            <li class="flex items-start"><span class="text-[#FF6B6B] font-bold text-2xl mr-3">✖</span><div><strong class="text-white">Complex &amp; Risky Migration</strong><p class="text-gray-300 font-light">Visa processes are difficult and lack of guidance increases risk of rejection and exploitation.</p></div></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-[#06D6A0] border-b-2 border-[#06D6A0] pb-2 mb-4">The Solution</h3>
+                        <ul class="space-y-4">
+                             <li class="flex items-start"><span class="text-[#06D6A0] font-bold text-2xl mr-3">✔</span><div><strong class="text-white">Internationally Aligned Training</strong><p class="text-gray-300 font-light">Prodent's EWF/IIW curriculum, supported by PMKVY's global recognition goals, ensures skills are relevant and certified.</p></div></li>
+                            <li class="flex items-start"><span class="text-[#06D6A0] font-bold text-2xl mr-3">✔</span><div><strong class="text-white">Holistic Pre-Departure Prep</strong><p class="text-gray-300 font-light">Prodent and PMKVY's PDOT provide essential language, soft-skill, and cultural training to ease integration.</p></div></li>
+                             <li class="flex items-start"><span class="text-[#06D6A0] font-bold text-2xl mr-3">✔</span><div><strong class="text-white">Ethical &amp; Supported Pathways</strong><p class="text-gray-300 font-light">Leveraging the e-Migrate platform and direct employer links ensures a secure, transparent, and legally compliant process.</p></div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="business-model" class="my-24">
+            <h2 class="section-title">The Prodent Advantage: A Sustainable Model</h2>
+            <p class="section-subtitle">Prodent's business model is built on a foundation of quality, partnerships, and financial viability. It delivers exceptional value to both trainees and European employers, ensuring a sustainable cycle of growth.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                 <div class="card order-2 lg:order-1">
+                    <h3 class="card-title text-center">Projected Year 1 Revenue Breakdown</h3>
+                    <p class="card-text text-center mb-4">A diversified revenue stream, combining student fees with substantial government subsidies (PMKVY) and employer placement bonuses, creates a robust and profitable financial model from the outset.</p>
+                    <div class="chart-container">
+                        <canvas id="revenueChart" width="750" height="500" style="display: block; box-sizing: border-box; height: 400px; width: 600px;"></canvas>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="card text-center items-center bg-[#118AB2] text-white">
+                        <span class="text-5xl mb-3">🎓</span>
+                        <h4 class="card-title text-white">EU-Standard Curriculum</h4>
+                        <p class="card-text text-gray-200">Training aligned with European Welding Federation (EWF) standards, taught by EU-certified instructors.</p>
+                    </div>
+                     <div class="card text-center items-center bg-[#06D6A0] text-white">
+                        <span class="text-5xl mb-3">🌍</span>
+                        <h4 class="card-title text-white">Global Certification</h4>
+                        <p class="card-text text-gray-200">Graduates receive a Polish Welding Institute certification, valid across the entire EU for two years.</p>
+                    </div>
+                     <div class="card text-center items-center bg-[#FFD166] text-[#073B4C]">
+                        <span class="text-5xl mb-3">💰</span>
+                        <h4 class="card-title text-[#073B4C]">Employer Bonuses</h4>
+                        <p class="card-text text-[#073B4C]">Direct placement contracts include per-hour bonuses, increasing graduate earnings immediately.</p>
+                    </div>
+                     <div class="card text-center items-center bg-[#FF6B6B] text-white">
+                        <span class="text-5xl mb-3">🤝</span>
+                        <h4 class="card-title text-white">Holistic Support</h4>
+                        <p class="card-text text-gray-200">Integrated language and soft-skills training ensures graduates are not just technically skilled, but job-ready.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-[#073B4C] text-white mt-16 py-8 px-4">
+        <div class="container mx-auto text-center">
+            <p class="font-bold">Prodent Skill Development Centre</p>
+            <p class="text-sm text-gray-300">Empowering Indian Talent for a Global Future.</p>
+        </div>
+    </footer>
+
+    <div id="llmModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" id="closeModalBtn">×</span>
+            <h3 id="modalTitle" class="text-xl font-bold mb-4 text-[#073B4C]"></h3>
+            <div id="modalContent" class="text-gray-700 text-left"></div>
+            <div id="loadingIndicator" class="loading-spinner hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        const energeticPlayful = {
+            primary: '#FF6B6B',
+            secondary: '#FFD166',
+            accent: '#06D6A0',
+            neutral: '#118AB2',
+            text: '#073B4C',
+            lightText: '#ffffff'
+        };
+
+        const chartTooltipOptions = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            }
+                            return label;
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        color: energeticPlayful.text,
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            }
+        };
+
+        function wrapLabel(str, maxWidth) {
+            if (str.length <= maxWidth) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).trim().length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            }
+            if (currentLine.length > 0) lines.push(currentLine);
+            return lines;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new Chart(document.getElementById('demandChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Welders', 'Construction Workers', 'Electricians', 'Truck Drivers', 'Machine Operators', 'Plumbers'].map(l => wrapLabel(l, 16)),
+                    datasets: [{
+                        label: 'Relative Demand Score',
+                        data: [95, 90, 85, 82, 78, 75],
+                        backgroundColor: [energeticPlayful.primary, energeticPlayful.neutral, energeticPlayful.secondary, energeticPlayful.accent, '#F896D8', '#B1A296'],
+                        borderColor: energeticPlayful.lightText,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    ...chartTooltipOptions,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                           ticks: { color: energeticPlayful.text, font: { weight: '600' } },
+                           grid: { display: false }
+                        },
+                        y: {
+                           ticks: { color: energeticPlayful.text, font: { weight: '600' } },
+                           grid: { color: 'rgba(7, 59, 76, 0.1)' }
+                        }
+                    },
+                    plugins: { ...chartTooltipOptions.plugins, legend: { display: false } }
+                }
+            });
+
+            new Chart(document.getElementById('sectorChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Construction', 'Services', 'Transport/Logistics', 'Other'],
+                    datasets: [{
+                        label: 'Share of Workforce',
+                        data: [39, 14, 10, 37],
+                        backgroundColor: [energeticPlayful.primary, energeticPlayful.secondary, energeticPlayful.accent, energeticPlayful.neutral],
+                        borderColor: energeticPlayful.lightText,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    ...chartTooltipOptions,
+                    maintainAspectRatio: false,
+                    cutout: '60%'
+                }
+            });
+
+            new Chart(document.getElementById('challengesChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Visa Complexity', 'Language Barrier', ['Cultural', 'Mismatch'], ['Skill', 'Recognition'], ['Social', 'Isolation']].map(l => Array.isArray(l) ? l : wrapLabel(l, 16)),
+                    datasets: [{
+                        label: 'Challenge Severity Index',
+                        data: [9.5, 9, 8, 8.5, 7.5],
+                        backgroundColor: 'rgba(255, 107, 107, 0.4)',
+                        borderColor: energeticPlayful.primary,
+                        pointBackgroundColor: energeticPlayful.primary,
+                        pointBorderColor: energeticPlayful.lightText,
+                        pointHoverBackgroundColor: energeticPlayful.lightText,
+                        pointHoverBorderColor: energeticPlayful.primary,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    ...chartTooltipOptions,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(7, 59, 76, 0.2)' },
+                            grid: { color: 'rgba(7, 59, 76, 0.2)' },
+                            pointLabels: {
+                                color: energeticPlayful.text,
+                                font: { size: 12, weight: '600' }
+                            },
+                            ticks: {
+                                color: energeticPlayful.text,
+                                backdropColor: 'rgba(247, 247, 247, 0.75)',
+                                stepSize: 2
+                            },
+                            min: 0,
+                            max: 10
+                        }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('revenueChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Training Fees (68.8%)', 'PMKVY Subsidy (24.1%)', 'Placement Bonus (7.1%)'],
+                    datasets: [{
+                        label: 'Revenue Source (₹)',
+                        data: [9600000, 3360000, 1000000],
+                        backgroundColor: [energeticPlayful.accent, energeticPlayful.secondary, energeticPlayful.primary],
+                        borderColor: energeticPlayful.lightText,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    ...chartTooltipOptions,
+                    maintainAspectRatio: false
+                }
+            });
+
+            const llmModal = document.getElementById('llmModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            function showModal(title, content) {
+                modalTitle.textContent = title;
+                modalContent.textContent = content;
+                loadingIndicator.classList.add('hidden');
+                llmModal.classList.remove('hidden');
+            }
+
+            function showLoading(title) {
+                modalTitle.textContent = title;
+                modalContent.textContent = '';
+                loadingIndicator.classList.remove('hidden');
+                llmModal.classList.remove('hidden');
+            }
+
+            closeModalBtn.onclick = function() {
+                llmModal.classList.add('hidden');
+            }
+
+            window.onclick = function(event) {
+                if (event.target == llmModal) {
+                    llmModal.classList.add('hidden');
+                }
+            }
+
+            const getInsightsBtn = document.getElementById('getInsightsBtn');
+            getInsightsBtn.addEventListener('click', async () => {
+                const country = document.getElementById('countrySelect').value;
+                showLoading(`Fetching Job Insights for ${country}...`);
+
+                let chatHistory = [];
+                const prompt = `Provide a brief overview of current blue-collar job market trends and specific in-demand roles in ${country}, focusing on industries like manufacturing, construction, and logistics. Keep the response concise, around 100-150 words.`;
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        showModal(`Job Market Insights: ${country}`, text);
+                    } else {
+                        showModal(`Job Market Insights: ${country}`, 'Could not retrieve insights. Please try again.');
+                    }
+                } catch (error) {
+                    showModal(`Job Market Insights: ${country}`, `An error occurred: ${error.message}`);
+                }
+            });
+
+            const getVisaTipBtn = document.getElementById('getVisaTipBtn');
+            getVisaTipBtn.addEventListener('click', async () => {
+                const visaStep = document.getElementById('visaStepSelect').value;
+                showLoading(`Getting Tip for "${visaStep}"...`);
+
+                let chatHistory = [];
+                const prompt = `Give a concise and helpful tip for navigating the "${visaStep}" stage of the European work visa process for an Indian blue-collar worker. Focus on common issues or best practices. Keep it under 80 words.`;
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        showModal(`Visa Tip: ${visaStep}`, text);
+                    } else {
+                        showModal(`Visa Tip: ${visaStep}`, 'Could not retrieve tip. Please try again.');
+                    }
+                } catch (error) {
+                    showModal(`Visa Tip: ${visaStep}`, `An error occurred: ${error.message}`);
+                }
+            });
+        });
+    </script>
+
+
+
+</body></html>
